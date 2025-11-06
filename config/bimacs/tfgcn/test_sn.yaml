@@ -1,0 +1,54 @@
+# model & weight
+runs: 1
+weights: tfgcn-sn.pt
+#weight_name: 1
+
+model: model.tfgcn-sn.Model
+# saving names
+result_save_name: "tfgcn_sub1"
+weight_dir: ./weights/
+
+# setup
+gaussian_process: False
+gauss_mean: tfgcn_sn_sub1_mean.npy
+gauss_cov: tfgcn_sn_sub1_std.npy
+
+test_a: False
+test_noise: True
+test_empty: False
+test_ikea: False
+noise_type: pepper
+noise_intensity: 0.25
+
+model_args:
+  num_class: 14
+  num_person: 1
+  num_point: 26
+  graph: graph.bimacs_partbdy.Graph
+  num_point_b: 20
+  coeff: 3.0
+  graph_b: graph.ikea.Graph
+  dataset: 'bimacs' # 'ikea'
+  graph_args:
+    labeling_mode: 'spatial'
+
+# test 
+phase: test
+device: 0
+batch_size: 32
+test_batch_size: 1
+subject: 1
+work_dir: ./work_dir/bimacs/
+
+# feeder
+dataset: 'bimacs' # 'bimacs' or 'ikea'
+feeder: feeders.feeder_ntu.Feeder
+train_feeder_args:
+  data_path: ./data/bimacs/framesegs_120_10_1/mirrored_bihands_timer_train_data_joint.npy
+  label_path: ./data/bimacs/framesegs_120_10_1/mirrored_bihands_timer_train_label.pkl
+
+test_feeder_args:
+  original_path: ./data/bimacs/segtest_1
+  data_path_b: ./data/ikea/test/
+  debug: False
+  num_point: 26

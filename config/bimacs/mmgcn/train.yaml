@@ -1,0 +1,65 @@
+model_save_name: "1"
+model_save_dir: ./work_dir/bimacts/mmgcn
+work_dir: ./work_dir/bimacts/mmgcn
+num_worker: 12
+
+# model
+model: model.mmgcn.Model
+
+# mixup data
+alpha: 0.2 # for all nodes: 0.2
+only_objects: False
+only_skeleton: False
+index_start: 12
+
+# feeder
+feeder: feeders.feeder.Feeder
+train_feeder_args:
+  split: train
+  num_class: 14
+  dataset: "bimacts"
+  image_stream: True
+  smooth_label: True
+  kernel: "gaussian"
+  kernel_size: 5
+  random_choose: True
+  random_move: True
+  downsample_factor: 30
+  data_path: /mnt/data_base/BimanualActions/generated_data/frameseg_120_10_1/train.npz
+  debug: False
+
+val_feeder_args:
+  split: val
+  num_class: 14
+  image_stream: False
+  dataset: "bimacts"
+  downsample_factor: 30
+  data_path: /mnt/data_base/BimanualActions/generated_data/frameseg_120_10_1/val.npz
+  debug: False
+
+model_args:
+  num_class: 14
+  num_person: 1
+  num_point: 26
+  in_channels: 3
+  graph: graph.bimacs_partbdy.Graph
+
+  graph_args:
+    num_node: 26
+    labeling_mode: 'spatial'
+
+# optim
+optimizer: SGD
+weight_decay: 0.0002
+base_lr: 0.2
+step: [20, 40]
+
+# training
+device: [0, 1]
+batch_size: 16
+val_batch_size: 16
+num_epoch: 60
+nesterov: True
+#
+#start_epoch: 38
+#weights: ./runs/bimacs/.pt

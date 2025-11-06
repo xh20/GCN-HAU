@@ -1,0 +1,64 @@
+model_save_name: "1"
+model_save_dir: ./runs/bimacs/pgcn/
+work_dir: ./work_dir/bimacs/pgcn/
+num_worker: 12
+
+# mixup data
+alpha: 0.2 # for all nodes: 0.2
+only_objects: False
+only_skeleton: False
+index_start: 12
+
+# model
+model: model.pgcn.Model
+model_args:
+  num_class: 14
+  num_person: 1
+  num_point: 26
+  coeff: 0.0
+  graph: graph.bimacs_partbdy.Graph
+  graph_b: graph.ikea.Graph
+  dataset: 'bimacs' # 'bimacs'
+  graph_args:
+    num_node: 26
+    labeling_mode: 'spatial'
+
+# feeder
+feeder: feeders.feeder.Feeder
+train_feeder_args:
+  split: train
+  num_class: 14
+  dataset: "bimacts"
+  image_stream: False
+  smooth_label: False
+  kernel: "gaussian"
+  kernel_size: 5
+  random_choose: True
+  random_move: True
+  downsample_factor: 30
+  data_path: /mnt/data_base/BimanualActions/generated_data/frameseg_120_10_1/train.npz
+  debug: False
+
+val_feeder_args:
+  split: val
+  num_class: 14
+  image_stream: False
+  dataset: "bimacts"
+  downsample_factor: 30
+  data_path: /mnt/data_base/BimanualActions/generated_data/frameseg_120_10_1/val.npz
+  debug: False
+
+# optim
+optimizer: SGD
+weight_decay: 0.0002
+base_lr: 0.2
+step: [20, 40]
+
+# training
+device: [0, 1]
+batch_size: 32
+val_batch_size: 32
+num_epoch: 60
+nesterov: True
+#
+

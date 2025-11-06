@@ -1,0 +1,33 @@
+# test
+phase: test
+weights: ./weights/mmgcn.pt
+result_save_name: "mmgcn_sub1"
+model: model.mmgcn.Model
+
+# feeder
+feeder: feeders.feeder.Feeder
+
+test_feeder_args:
+  split: test
+  image_stream: True
+  "dataset": "bimacts"
+  "downsample_factor": 30
+  "add_noise": False
+  "noise_type": "pepper"
+  "noise_intensity": 0.05
+  "data_path": "/media/hao/data_base/BimanualActions/generated_data/subject_1"
+  "debug": False
+
+model_args:
+  num_class: 14
+  num_person: 1
+  num_point: 26
+  in_channels: 3
+  graph: graph.bimacs_partbdy.Graph
+  graph_args:
+    num_node: 26
+    labeling_mode: 'spatial'
+
+work_dir: ./work_dir/bimacts/
+device: 0
+test_batch_size: 1

@@ -1,0 +1,27 @@
+# feeder
+feeder: feeders.feeder_ntu.Feeder
+test_feeder_args:
+  original_path: ./data/ikea/test/
+  debug: False
+
+# model
+model: model.spa_multi_jpu_psp_conv.Model
+model_args:
+  num_class: 32
+  num_person: 1
+  num_point: 20
+  graph: graph.ikea.Graph
+  graph_args:
+    labeling_mode: 'spatial'
+  in_channels: 2
+
+# test 
+phase: test
+device: 0
+test_batch_size: 1
+
+weights: ./runs/ikea/spa_psp_d500_g100/spa_psp-35-27216.pt
+
+work_dir: ./work_dir/ikea/spa_psp_test
+model_saved_name: ./runs/ikea/spa_psp_test
+log_name: ./spa_multi_scale_test_ikea.json

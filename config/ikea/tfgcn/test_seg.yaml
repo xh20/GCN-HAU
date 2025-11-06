@@ -1,0 +1,52 @@
+runs: 1
+model: model.bpgcn_SN_max3_res_sn_max3_ds1.Model
+
+# need to change!
+weights: -7.pt
+log_name: test_ikea_bpgcn_SN_max3_res_sn_max3_ds1_7.json
+result_save_name: bpgcn_SN_max3_res_sn_max3_ds1_epoch7
+gauss_mean: gauss_mean_bpgcn_SN_max3_res_sn_max3_ds1_epoch7
+gauss_cov: gauss_cov_bpgcn_SN_max3_res_sn_max3_ds1_epoch7
+
+weight_dir: /media/dataset/Human_Object_Interaction_Segmentation/segmentation/runs/ikea/2_bpgcn_SN_max3_res_sn_max3_ds1/
+work_dir: ./work_dir/ikea/bpgcn_SN_max3_res_sn_max3_ds1
+
+
+# setup
+test_bimacs: False
+test_noise: False
+test_empty: False
+test_ikea: True
+noise_type: gaussian  # pepper, poisson, gaussian
+noise_intensity: 3.0
+
+# feeder
+feeder: feeders.feeder_ntu.Feeder
+
+train_feeder_args:
+  data_path: /media/dataset/IKEA/processed/data2/xenv_train_2d_data_joint_20.npy
+  label_path: /media/dataset/IKEA/processed/data2/xenv_train_label.pkl
+
+test_feeder_args:
+  original_path: ./data/ikea/test/
+  debug: False
+  data_path_b: ./data/bimacs/segtest_1
+  num_point: 20  # bimacs: 26, ikea: 20
+
+# model
+model_args:
+  num_class: 32
+  num_person: 1
+  num_point: 20
+  coeff: 3.0
+  graph: graph.bimacs_partbdy.Graph
+  graph_b: graph.ikea.Graph
+  dataset: 'ikea' # 'bimacs'
+  graph_args:
+    labeling_mode: 'spatial'
+  in_channels: 2
+
+# test 
+phase: test
+device: 0
+test_batch_size: 1
